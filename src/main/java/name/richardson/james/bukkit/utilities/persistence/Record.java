@@ -77,18 +77,4 @@ public interface Record {
 	 */
 	public void setModifiedAt(Timestamp modifiedAt);
 
-	/**
-	 * Get the version of this record for OptimisticLocking.
-	 *
-	 * @returns The version of the record.
-	 */
-	public int getVersion();
-
-	/**
-	 * Set the version for OptimisticLocking
-	 *
-	 * @since 7.0.0
-	 */
-	public void setVersion(int version);
-
 }
