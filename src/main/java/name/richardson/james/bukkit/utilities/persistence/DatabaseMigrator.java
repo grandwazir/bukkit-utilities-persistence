@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013 James Richardson.
  *
- * SimpleDatabaseMigrator.java is part of BukkitUtilities.
+ * DatabaseMigrator.java is part of BukkitUtilities.
  *
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,22 +16,14 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.richardson.james.bukkit.utilities.persistence.database;
+package name.richardson.james.bukkit.utilities.persistence;
 
 import com.avaje.ebean.EbeanServer;
 
 /**
- * This simple implementation of {@link name.richardson.james.bukkit.utilities.persistence.database.DatabaseMigrator} drops the previous version of a schema and
- * replaces it with an upgraded version. It does not attempt to transfer across any records.
- *
- * @author James Richardson
- * @version 7.0.0
+ * Created by james on 23/12/13.
  */
-public class SimpleDatabaseMigrator extends AbstractDatabaseMigrator {
-
-	public SimpleDatabaseMigrator(DatabaseLoader oldDatabaseLoader, DatabaseLoader newDatabaseLoader) {
-		super(oldDatabaseLoader, newDatabaseLoader);
-	}
+public interface DatabaseMigrator {
 
 	/**
 	 * This method is called after the new database has been loaded.
@@ -41,10 +33,7 @@ public class SimpleDatabaseMigrator extends AbstractDatabaseMigrator {
 	 * @param database the old database
 	 * @since 7.0.0
 	 */
-	@Override
-	public void afterUpgrade(EbeanServer database) {
-		return;
-	}
+	void afterUpgrade(EbeanServer database);
 
 	/**
 	 * This method is called after the old database has been loaded but before the new one has been created.
@@ -55,8 +44,13 @@ public class SimpleDatabaseMigrator extends AbstractDatabaseMigrator {
 	 * @param database the old database
 	 * @since 7.0.0
 	 */
-	@Override
-	public void beforeUpgrade(EbeanServer database) {
-		return;
-	}
+	void beforeUpgrade(EbeanServer database);
+
+	public DatabaseLoader getNewDatabaseLoader();
+
+	public DatabaseLoader getOldDatabaseLoader();
+
+	public void initalise();
+
+
 }

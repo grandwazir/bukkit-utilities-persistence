@@ -16,7 +16,7 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.persistence.database;
+package name.richardson.james.bukkit.utilities.persistence;
 
 import java.io.IOException;
 import java.io.OutputStream;

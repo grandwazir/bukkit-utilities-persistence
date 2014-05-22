@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013 James Richardson.
  *
- * DatabaseMigrator.java is part of BukkitUtilities.
+ * SimpleDatabaseMigrator.java is part of BukkitUtilities.
  *
  * BukkitUtilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,14 +16,22 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.richardson.james.bukkit.utilities.persistence.database;
+package name.richardson.james.bukkit.utilities.persistence;
 
 import com.avaje.ebean.EbeanServer;
 
 /**
- * Created by james on 23/12/13.
+ * This simple implementation of {@link DatabaseMigrator} drops the previous version of a schema and
+ * replaces it with an upgraded version. It does not attempt to transfer across any records.
+ *
+ * @author James Richardson
+ * @version 7.0.0
  */
-public interface DatabaseMigrator {
+public class SimpleDatabaseMigrator extends AbstractDatabaseMigrator {
+
+	public SimpleDatabaseMigrator(DatabaseLoader oldDatabaseLoader, DatabaseLoader newDatabaseLoader) {
+		super(oldDatabaseLoader, newDatabaseLoader);
+	}
 
 	/**
 	 * This method is called after the new database has been loaded.
@@ -33,7 +41,10 @@ public interface DatabaseMigrator {
 	 * @param database the old database
 	 * @since 7.0.0
 	 */
-	void afterUpgrade(EbeanServer database);
+	@Override
+	public void afterUpgrade(EbeanServer database) {
+		return;
+	}
 
 	/**
 	 * This method is called after the old database has been loaded but before the new one has been created.
@@ -44,13 +55,8 @@ public interface DatabaseMigrator {
 	 * @param database the old database
 	 * @since 7.0.0
 	 */
-	void beforeUpgrade(EbeanServer database);
-
-	public DatabaseLoader getNewDatabaseLoader();
-
-	public DatabaseLoader getOldDatabaseLoader();
-
-	public void initalise();
-
-
+	@Override
+	public void beforeUpgrade(EbeanServer database) {
+		return;
+	}
 }

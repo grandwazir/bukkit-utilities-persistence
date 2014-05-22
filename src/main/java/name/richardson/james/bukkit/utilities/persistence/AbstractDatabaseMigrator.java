@@ -16,7 +16,7 @@
  * BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package name.richardson.james.bukkit.utilities.persistence.database;
+package name.richardson.james.bukkit.utilities.persistence;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,7 +49,7 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	}
 
 	/**
-	 * Gets the current {@link name.richardson.james.bukkit.utilities.persistence.database.DatabaseLoader}.
+	 * Gets the current {@link DatabaseLoader}.
 	 *
 	 * @return The current database loader
 	 */
@@ -59,7 +59,7 @@ public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 	}
 
 	/**
-	 * Gets the old {@link name.richardson.james.bukkit.utilities.persistence.database.DatabaseLoader}.
+	 * Gets the old {@link DatabaseLoader}.
 	 *
 	 * This will most likely be invalid once the new loader has been initalised.
 	 *

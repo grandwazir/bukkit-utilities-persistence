@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- DefaultDatabaseLoader.java is part of bukkit-utilities.
+ DatabaseLoader.java is part of bukkit-utilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -16,29 +16,32 @@
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package name.richardson.james.bukkit.utilities.persistence.database;
+package name.richardson.james.bukkit.utilities.persistence;
 
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+import com.avaje.ebean.EbeanServer;
 
-public final class DefaultDatabaseLoader extends AbstractDatabaseLoader {
+/**
+ * Loads and initalises an Ebean server. Once the database is initalised the loader holds an instance of the database for plugins to use.
+ */
+public interface DatabaseLoader {
 
-	public DefaultDatabaseLoader(DatabaseConfiguration configuration) {
-		super(configuration);
-	}
+	public void create();
 
-	@Override
-	protected void afterDatabaseCreate() {
-		return;
-	}
+	public void drop();
 
-	@Override
-	protected void beforeDatabaseCreate() {
-		return;
-	}
+	/**
+	 * Initalise the database.
+	 */
+	public void initalise();
 
-	@Override
-	protected void beforeDatabaseDrop() {
-		return;
-	}
+	/**
+	 * Returns the Ebean server created by this database loader.
+	 *
+	 * @return the EBean server.
+	 */
+	public EbeanServer getEbeanServer();
 
+	public void load();
+
+	public boolean isSchemaValid();
 }
