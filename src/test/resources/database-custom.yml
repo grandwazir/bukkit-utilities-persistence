@@ -1,0 +1,6 @@
+username: frank
+password: ted
+driver: org.sqf.JDBC
+isolation: READ_COMMITTED
+url: jdbc:mysql:/3019
+version: 10

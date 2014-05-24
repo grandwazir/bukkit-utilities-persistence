@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
@@ -32,36 +31,31 @@ import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
+import com.vityuk.ginger.Localizable;
+import com.vityuk.ginger.Localization;
+import com.vityuk.ginger.LocalizationBuilder;
+import configuration.DatabaseConfiguration;
+import localisation.PersistenceMessages;
 import org.apache.commons.lang.Validate;
-
-import name.richardson.james.bukkit.utilities.localisation.BukkitUtilities;
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
-
-import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
+	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:localisation/bukkit-utilities-persistence.properties").build();
+	private static final PersistenceMessages MESSAGES = LOCALISATION.getLocalizable(PersistenceMessages.class);
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private final ClassLoader classLoader;
-	private final List<Class<?>> classes;
-	private final DataSourceConfig datasourceConfig;
-	private final Logger logger = PluginLoggerFactory.getLogger(AbstractDatabaseLoader.class);
-	private final boolean rebuild = false;
 	private final ServerConfig serverConfig;
-	private final Logger globalLogger = Logger.getLogger("");
-	private final Level globalLoggerInitialLevel = globalLogger.getLevel();
-	private final PrintStream out = System.out;
 	private EbeanServer ebeanserver;
-	private PrintStream err = System.err;
 	private DdlGenerator generator;
 
 	public AbstractDatabaseLoader(DatabaseConfiguration configuration) {
 		Validate.notEmpty(configuration.getServerConfig().getClasses(), "Database classes must be provided!");
 		Validate.notNull(configuration, "A configuration is required!");
-		this.classes = configuration.getServerConfig().getClasses();
 		this.serverConfig = configuration.getServerConfig();
-		this.datasourceConfig = configuration.getDataSourceConfig();
 		this.classLoader = configuration.getClass().getClassLoader();
 	}
 
@@ -71,10 +65,10 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	synchronized public final void initalise() {
-		logger.log(Level.FINE, DATABASE_LOADING.asMessage());
+		LOGGER.debug(MESSAGES.databaseLoading());
 		this.load();
-		if (!this.isSchemaValid() || this.rebuild) {
-			final SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
+		if (!this.isSchemaValid()) {
+			SpiEbeanServer server = (SpiEbeanServer) this.ebeanserver;
 			generator = server.getDdlGenerator();
 			this.drop();
 			this.create();
@@ -91,124 +85,67 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	protected abstract void beforeDatabaseDrop();
 
 	protected String getDeleteDLLScript() {
-		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
-		final DdlGenerator generator = server.getDdlGenerator();
+		SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
+		DdlGenerator generator = server.getDdlGenerator();
 		return generator.generateDropDdl();
 	}
 
 	protected String getGenerateDDLScript() {
-		final SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
-		final DdlGenerator generator = server.getDdlGenerator();
+		SpiEbeanServer server = (SpiEbeanServer) getEbeanServer();
+		DdlGenerator generator = server.getDdlGenerator();
 		return generator.generateCreateDdl();
 	}
 
 	@Override
 	public final void create() {
-		logger.log(Level.INFO, DATABASE_CREATING.asMessage());
+		LOGGER.info(MESSAGES.databaseCreating());
 		this.beforeDatabaseCreate();
-		// reload the database this allows for removing classes
-		String script = getGenerateDDLScript();
 		this.load();
-		try {
-			this.setSuppressMessages(true);
-			generator.runScript(false, script);
-		} finally {
-			this.setSuppressMessages(false);
-		}
+		String script = getGenerateDDLScript();
+		generator.runScript(false, script);
 		this.afterDatabaseCreate();
 	}
 
 	@Override
 	public final void drop() {
-		logger.log(Level.FINER, DATABASE_DROPPING_TABLES.asMessage());
+		LOGGER.info(MESSAGES.databaseDropping());
 		this.beforeDatabaseDrop();
 		String script = this.getDeleteDLLScript();
-		try {
-			this.setSuppressMessages(true);
-			generator.runScript(true, script);
-		} finally {
-			this.setSuppressMessages(false);
-		}
+		generator.runScript(true, script);
 	}
 
 	@Override
 	public final void load() {
-		if (logger.isLoggable(Level.ALL)) {
-			this.serverConfig.setLoggingToJavaLogger(true);
-			this.serverConfig.setLoggingLevel(LogLevel.SQL);
-		}
 		ClassLoader currentClassLoader = null;
 		try {
-			this.serverConfig.setClasses(this.classes);
 			currentClassLoader = Thread.currentThread().getContextClassLoader();
 			Thread.currentThread().setContextClassLoader(this.classLoader);
-			this.setSuppressMessages(true);
 			this.ebeanserver = EbeanServerFactory.create(this.serverConfig);
 		} finally {
-			this.setSuppressMessages(false);
 			if (currentClassLoader != null) {
 				Thread.currentThread().setContextClassLoader(currentClassLoader);
 			}
 		}
 	}
 
-	/**
-	 * This is not an elegant function. It is used to suppress the warning output printed to system out and err by Ebean during the DDL generation.
-	 * Why someone would choice to use this two, especially when there is a logger available in that class is beyond me.
-	 *
-	 * @param b
-	 */
-	private void setSuppressMessages(final boolean b) {
-		if (b) {
-			globalLogger.setLevel(Level.OFF);
-			System.setOut(new PrintStream(new OutputStream() {
-				@Override public void write(int b) throws IOException {}
-			}));
-			System.setErr(new PrintStream(new OutputStream() {
-				@Override public void write(int b) throws IOException {
-				}
-			}));
-		} else {
-			globalLogger.setLevel(globalLoggerInitialLevel);
-			System.setOut(out);
-			System.setErr(err);
-		}
-	}
-
 	@Override
 	public final boolean isSchemaValid() {
+		List<Class<?>> classes = this.serverConfig.getClasses();
 		boolean valid = true;
-		for (final Class<?> ebean : this.classes) {
+		for (Class<?> ebean : classes) {
 			try {
-				this.setSuppressMessages(true);
 				this.ebeanserver.find(ebean).findRowCount();
 			} catch (final Exception e) {
 				valid = false;
 				break;
-			} finally {
-				this.setSuppressMessages(false);
 			}
 		}
 		if (valid) {
-			logger.log(Level.FINER, DATABASE_VALID_SCHEMA.asMessage());
+			LOGGER.debug(MESSAGES.databaseValid());
 		} else {
-			logger.log(Level.WARNING, DATABASE_INVALID_SCHEMA.asMessage());
+			LOGGER.warn(MESSAGES.databaseInvalid());
 		}
 		return valid;
 	}
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractDatabaseLoader{");
-		sb.append("classes=").append(classes);
-		sb.append(", classLoader=").append(classLoader);
-		sb.append(", datasourceConfig=").append(datasourceConfig);
-		sb.append(", ebeanserver=").append(ebeanserver);
-		sb.append(", generator=").append(generator);
-		sb.append(", globalLoggerInitialLevel=").append(globalLoggerInitialLevel);
-		sb.append(", rebuild=").append(rebuild);
-		sb.append(", serverConfig=").append(serverConfig);
-		sb.append('}');
-		return sb.toString();
-	}
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
  Copyright (c) 2013 James Richardson.
 
- DefaultDatabaseLoader.java is part of bukkit-utilities.
+ DatabaseConfiguration.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -15,30 +15,17 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
+package configuration;
 
-package name.richardson.james.bukkit.utilities.persistence;
+import com.avaje.ebean.config.DataSourceConfig;
+import com.avaje.ebean.config.ServerConfig;
 
-import configuration.DatabaseConfiguration;
+public interface DatabaseConfiguration {
 
-public final class DefaultDatabaseLoader extends AbstractDatabaseLoader {
+	public DataSourceConfig getDataSourceConfig();
 
-	public DefaultDatabaseLoader(DatabaseConfiguration configuration) {
-		super(configuration);
-	}
+	public ServerConfig getServerConfig();
 
-	@Override
-	protected void afterDatabaseCreate() {
-		return;
-	}
-
-	@Override
-	protected void beforeDatabaseCreate() {
-		return;
-	}
-
-	@Override
-	protected void beforeDatabaseDrop() {
-		return;
-	}
+	public int getDatabaseVersion();
 
 }
