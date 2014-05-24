@@ -20,7 +20,7 @@ package name.richardson.james.bukkit.utilities.persistence;
 
 import configuration.DatabaseConfiguration;
 
-public final class DefaultDatabaseLoader extends AbstractDatabaseLoader {
+public class DefaultDatabaseLoader extends AbstractDatabaseLoader {
 
 	public DefaultDatabaseLoader(DatabaseConfiguration configuration) {
 		super(configuration);

@@ -24,7 +24,7 @@ import configuration.DatabaseConfiguration;
  * Create and return a suitable database loader depending on the database configuration provided. This is used to abstract away the implementation requirement
  * to have a different database loader for SQLite due to a bug in the schema generation when using the Ebean versions shipped with Bukkit.
  */
-public final class DatabaseLoaderFactory {
+public class DatabaseLoaderFactory {
 
 	/**
 	 * Returns a database loader configured with the provided database configuration.
@@ -32,7 +32,7 @@ public final class DatabaseLoaderFactory {
 	 * @param configuration the configuration to use for the database loader
 	 * @return the database loader
 	 */
-	public final static DatabaseLoader getDatabaseLoader(DatabaseConfiguration configuration) {
+	public static DatabaseLoader getDatabaseLoader(DatabaseConfiguration configuration) {
 		if (configuration.getDataSourceConfig().getDriver().contains("sqlite")) {
 			return new SQLiteDatabaseLoader(configuration);
 		} else {
