@@ -40,7 +40,7 @@ public class SimpleDatabaseConfiguration extends AbstractConfiguration implement
 		VERSION("version");
 		private final String path;
 
-		Keys(final String path) {
+		Keys(String path) {
 			this.path = path;
 		}
 
@@ -55,7 +55,7 @@ public class SimpleDatabaseConfiguration extends AbstractConfiguration implement
 	private final String pluginName;
 	private final ServerConfig serverConfig;
 
-	public SimpleDatabaseConfiguration(final File file, final InputStream defaults, final String pluginName, final ServerConfig serverConfig)
+	public SimpleDatabaseConfiguration(File file, InputStream defaults, String pluginName, ServerConfig serverConfig)
 	throws IOException {
 		super(file, defaults);
 		this.folder = file.getParentFile();
