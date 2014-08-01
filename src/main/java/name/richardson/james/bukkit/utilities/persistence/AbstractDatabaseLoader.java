@@ -18,24 +18,15 @@
 
 package name.richardson.james.bukkit.utilities.persistence;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.List;
-import java.util.logging.Level;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
-import com.avaje.ebean.LogLevel;
-import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
 import com.avaje.ebeaninternal.server.ddl.DdlGenerator;
-import com.vityuk.ginger.Localizable;
-import com.vityuk.ginger.Localization;
-import com.vityuk.ginger.LocalizationBuilder;
-import configuration.DatabaseConfiguration;
-import localisation.PersistenceMessages;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
+
 import org.apache.commons.lang.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,8 +34,7 @@ import org.apache.logging.log4j.Logger;
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
 public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
-	private static final Localization LOCALISATION = new LocalizationBuilder().withResourceLocation("classpath:localisation/bukkit-utilities-persistence.properties").build();
-	private static final PersistenceMessages MESSAGES = LOCALISATION.getLocalizable(PersistenceMessages.class);
+	private static final Messages MESSAGES = MessagesFactory.getMessages();
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	private final ClassLoader classLoader;
@@ -54,7 +44,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 
 	public AbstractDatabaseLoader(DatabaseConfiguration configuration) {
 		Validate.notEmpty(configuration.getServerConfig().getClasses(), "Database classes must be provided!");
-		Validate.notNull(configuration, "A configuration is required!");
+		Validate.notNull(configuration, "A name.richardson.james.bukkit.utilities.persistence.configuration is required!");
 		this.serverConfig = configuration.getServerConfig();
 		this.classLoader = configuration.getClass().getClassLoader();
 	}
@@ -65,6 +55,7 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 	}
 
 	synchronized public final void initalise() {
+		if (this.ebeanserver != null) return;
 		LOGGER.debug(MESSAGES.databaseLoading());
 		this.load();
 		if (!this.isSchemaValid()) {
@@ -72,9 +63,6 @@ public abstract class AbstractDatabaseLoader implements DatabaseLoader {
 			generator = server.getDdlGenerator();
 			this.drop();
 			this.create();
-			if (!this.isSchemaValid()) {
-				throw new RuntimeException("Unable to initalise database!");
-			}
 		}
 	}
 

@@ -1,7 +1,6 @@
-package configuration;
+package name.richardson.james.bukkit.utilities.persistence.configuration;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 import com.avaje.ebean.config.ServerConfig;

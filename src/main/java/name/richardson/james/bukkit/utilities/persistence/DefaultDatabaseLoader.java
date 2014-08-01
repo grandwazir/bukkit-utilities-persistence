@@ -18,7 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.persistence;
 
-import configuration.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 public class DefaultDatabaseLoader extends AbstractDatabaseLoader {
 

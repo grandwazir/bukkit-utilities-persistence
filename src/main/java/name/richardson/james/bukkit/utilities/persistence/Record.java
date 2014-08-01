@@ -19,6 +19,7 @@
 package name.richardson.james.bukkit.utilities.persistence;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 /**
  * This interface represents an Entity (or record) which is subsquently persisted into a database. It provides an interface of common metadata desirable for
@@ -36,6 +37,7 @@ public interface Record {
 	 * @since 7.0.0
 	 */
 	public Timestamp getCreatedAt();
+	void save();
 
 	/**
 	 * Set the time when this record was created.
@@ -51,7 +53,7 @@ public interface Record {
 	 * @return the primary key
 	 * @since 7.0.0
 	 */
-	public long getId();
+	public UUID getId();
 
 	/**
 	 * Set the primary key for this record.
@@ -59,8 +61,9 @@ public interface Record {
 	 * WARNING: You should not ever need to do this.
 	 *
 	 * @since 7.0.0
+	 * @param id
 	 */
-	public void setId(long id);
+	public void setId(UUID id);
 
 	/**
 	 * Get the last time this record was modified.

@@ -1,6 +1,5 @@
-package configuration;
+package name.richardson.james.bukkit.utilities.persistence.configuration;
 
-import java.io.File;
 import java.io.InputStream;
 
 import com.avaje.ebean.config.ServerConfig;
@@ -28,32 +27,32 @@ public class CustomDatabaseConfigurationTest {
 
 	@Test
 	public void whenGettingUsernameMatchValueInConfiguration() {
-		Assert.assertEquals("Value should be the same as provided by the configuration", "frank", configuration.getDataSourceConfig().getUsername());
+		Assert.assertEquals("Value should be the same as provided by the name.richardson.james.bukkit.utilities.persistence.configuration", "frank", configuration.getDataSourceConfig().getUsername());
 	}
 
 	@Test
 	public void whenGettingDriverMatchValueInConfiguration() {
-		Assert.assertEquals("Value should be the same as provided by the configuration", "org.sqf.JDBC", configuration.getDataSourceConfig().getDriver());
+		Assert.assertEquals("Value should be the same as provided by the name.richardson.james.bukkit.utilities.persistence.configuration", "org.sqf.JDBC", configuration.getDataSourceConfig().getDriver());
 	}
 
 	@Test
 	public void whenGettingIsolationLevelMatchValueInConfiguration() {
-		Assert.assertEquals("Value should be the same as provided by the configuration", 2, configuration.getDataSourceConfig().getIsolationLevel());
+		Assert.assertEquals("Value should be the same as provided by the name.richardson.james.bukkit.utilities.persistence.configuration", 2, configuration.getDataSourceConfig().getIsolationLevel());
 	}
 
 	@Test
 	public void whenGettingPasswordMatchValueInConfiguration() {
-		Assert.assertEquals("Value should be the same as provided by the configuration", "ted", configuration.getDataSourceConfig().getPassword());
+		Assert.assertEquals("Value should be the same as provided by the name.richardson.james.bukkit.utilities.persistence.configuration", "ted", configuration.getDataSourceConfig().getPassword());
 	}
 
 	@Test
 	public void whenGettingUrlMatchValueFromConfiguration() {
-		Assert.assertEquals("Value should be the same as provided by the configuration", "jdbc:mysql:/3019", configuration.getDataSourceConfig().getUrl());
+		Assert.assertEquals("Value should be the same as provided by the name.richardson.james.bukkit.utilities.persistence.configuration", "jdbc:mysql:/3019", configuration.getDataSourceConfig().getUrl());
 	}
 
 	@Test
 	public void whenGettingVersionShouldMatchValueFromConfiguration() {
-		Assert.assertEquals("Value should be the same as provided by the configuration", 10, configuration.getDatabaseVersion());
+		Assert.assertEquals("Value should be the same as provided by the name.richardson.james.bukkit.utilities.persistence.configuration", 10, configuration.getDatabaseVersion());
 	}
 
 	private static ServerConfig getDefaultServerConfig() {

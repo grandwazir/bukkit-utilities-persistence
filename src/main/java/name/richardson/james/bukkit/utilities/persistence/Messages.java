@@ -1,16 +1,11 @@
-package localisation;
+package name.richardson.james.bukkit.utilities.persistence;
 
-import com.vityuk.ginger.Localizable;
-
-public interface PersistenceMessages extends Localizable {
+public interface Messages {
 
 	String databaseCreating();
-
 	String databaseDropping();
-
 	String databaseInvalid();
-
 	String databaseLoading();
-
 	String databaseValid();
+
 }

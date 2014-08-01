@@ -18,21 +18,22 @@
 
 package name.richardson.james.bukkit.utilities.persistence;
 
-import configuration.DatabaseConfiguration;
+import name.richardson.james.bukkit.utilities.persistence.configuration.DatabaseConfiguration;
 
 /**
- * Create and return a suitable database loader depending on the database configuration provided. This is used to abstract away the implementation requirement
+ * Create and return a suitable database loader depending on the database name.richardson.james.bukkit.utilities.persistence.configuration provided. This is used to abstract away the implementation requirement
  * to have a different database loader for SQLite due to a bug in the schema generation when using the Ebean versions shipped with Bukkit.
  */
 public class DatabaseLoaderFactory {
 
 	/**
-	 * Returns a database loader configured with the provided database configuration.
+	 * Returns a database loader configured with the provided database name.richardson.james.bukkit.utilities.persistence.configuration.
 	 *
-	 * @param configuration the configuration to use for the database loader
+	 * @param configuration the name.richardson.james.bukkit.utilities.persistence.configuration to use for the database loader
 	 * @return the database loader
 	 */
 	public static DatabaseLoader getDatabaseLoader(DatabaseConfiguration configuration) {
+		configuration.getServerConfig().add(new EntityPersistenceController());
 		if (configuration.getDataSourceConfig().getDriver().contains("sqlite")) {
 			return new SQLiteDatabaseLoader(configuration);
 		} else {

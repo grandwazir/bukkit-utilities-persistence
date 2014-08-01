@@ -15,13 +15,11 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package configuration;
+package name.richardson.james.bukkit.utilities.persistence.configuration;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -30,7 +28,6 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 
 import name.richardson.james.bukkit.utilities.configuration.AbstractConfiguration;
-import name.richardson.james.bukkit.utilities.updater.PluginUpdater;
 
 public class SimpleDatabaseConfiguration extends AbstractConfiguration implements DatabaseConfiguration {
 
