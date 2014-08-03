@@ -1,5 +1,7 @@
 package name.richardson.james.bukkit.utilities.persistence;
 
+import java.sql.Timestamp;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +31,15 @@ public class AbstractRecordTest {
 		SimpleRecord record = new SimpleRecord();
 		record.save();
 		Assert.assertNotNull("CreatedAt cannot be null", record.getId());
+	}
+
+	@Test
+	public void shouldReturnDifferentModifiedAt() throws InterruptedException {
+		SimpleRecord record = new SimpleRecord();
+		record.save();
+		Timestamp at = record.getModifiedAt();
+		record.save();
+		Assert.assertNotEquals("The modified time should have been updated!", at, record.getModifiedAt());
 	}
 
 	@Test

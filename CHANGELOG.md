@@ -1,5 +1,9 @@
 # Changelog for BukkitUtilities (Persistence) (v1.0.0-SNAPSHOT)
 
+2014-08-02 00:07:22 +0100    added travis.yml (James Richardson)  
+2014-08-02 00:06:53 +0100    add gitignore (James Richardson)  
+2014-08-02 00:06:25 +0100    add pom.xml (James Richardson)  
+2014-08-01 19:05:58 +0100    stashing a ton of work (James Richardson)  
 2014-05-24 12:42:59 +0100    remove final from classes (James Richardson)  
 2014-05-24 12:28:55 +0100    added tests (James Richardson)  
 2014-05-22 21:21:53 +0100    remove version in favour of using modified timestamp instead (James Richardson)  

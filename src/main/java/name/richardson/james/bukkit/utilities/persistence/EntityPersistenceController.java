@@ -24,11 +24,11 @@ public class EntityPersistenceController implements BeanPersistController {
 	}
 
 	@Override public boolean preUpdate(final BeanPersistRequest<?> beanPersistRequest) {
-		return false;
+		return true;
 	}
 
 	@Override public boolean preDelete(final BeanPersistRequest<?> beanPersistRequest) {
-		return false;
+		return true;
 	}
 
 	@Override public void postInsert(final BeanPersistRequest<?> beanPersistRequest) {

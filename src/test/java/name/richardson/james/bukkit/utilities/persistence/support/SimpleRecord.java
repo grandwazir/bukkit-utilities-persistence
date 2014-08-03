@@ -10,6 +10,10 @@ import name.richardson.james.bukkit.utilities.persistence.AbstractRecord;
 @Entity
 public class SimpleRecord extends AbstractRecord {
 
+	@Override
+	public void save() {
+		getDatabase().save(this);
+	}
 
 	@Override protected EbeanServer getDatabase() {
 		return Ebean.getServer("Test");
